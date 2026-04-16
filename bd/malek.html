@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Malek ❤️</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Poppins;
+        background: black;
+        color: white;
+        text-align: center;
+        overflow-x: hidden;
+      }
+
+      /* LOCK */
+      #lockScreen {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: black;
+        z-index: 999;
+      }
+
+      .lock-box {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        border-radius: 20px;
+      }
+
+      input {
+        padding: 10px;
+        border-radius: 10px;
+        border: none;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 20px;
+        background: #ff4b6e;
+        color: white;
+        margin-top: 10px;
+        cursor: pointer;
+      }
+
+      /* HERO */
+      .hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background: url("malek1.jpg") center/cover;
+        animation: zoomBg 15s infinite alternate;
+      }
+
+      @keyframes zoomBg {
+        0% {
+          background-size: 100%;
+        }
+        100% {
+          background-size: 120%;
+        }
+      }
+
+      /* GLOW TEXT */
+      .hero h1 {
+        font-size: 3.5em;
+        animation: glow 2s infinite alternate;
+      }
+
+      @keyframes glow {
+        from {
+          text-shadow: 0 0 10px #ff4b6e;
+        }
+        to {
+          text-shadow: 0 0 30px #ff4b6e;
+        }
+      }
+
+      /* HEART BEAT */
+      .heart-big {
+        font-size: 40px;
+        animation: beat 1s infinite;
+      }
+      @keyframes beat {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.3);
+        }
+      }
+
+      /* TEXT */
+      #text {
+        padding: 40px;
+        font-size: 1.4em;
+        max-width: 650px;
+        margin: auto;
+        line-height: 1.8;
+      }
+
+      /* VIDEO */
+      .video-box {
+        width: 280px;
+        margin: 30px auto;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: 0.3s;
+      }
+      .video-box:hover {
+        transform: scale(1.05);
+      }
+      video {
+        width: 100%;
+      }
+
+      /* GALLERY */
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        padding: 20px;
+      }
+
+      .gallery img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 15px;
+        transition: 0.5s;
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      .gallery img.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .gallery img:hover {
+        transform: scale(1.1) rotate(2deg);
+      }
+
+      /* MUSIC BTN */
+      #musicBtn {
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        background: #ff4b6e;
+        padding: 12px;
+        border-radius: 50%;
+        cursor: pointer;
+      }
+
+      /* HEARTS */
+      .heart {
+        position: fixed;
+        bottom: -10px;
+        animation: float 6s linear infinite;
+      }
+      @keyframes float {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-100vh);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="musicBtn" onclick="toggleMusic()">🎵</div>
+
+    <!-- LOCK -->
+    <div id="lockScreen">
+      <div class="lock-box">
+        <h2>🔐 Accès privé</h2>
+        <input type="password" id="passwordInput" />
+        <br />
+        <button onclick="checkPassword()">Entrer</button>
+        <p id="error"></p>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <h1>❤️ Malek ❤️</h1>
+      <div class="heart-big">💖</div>
+    </div>
+
+    <!-- TEXT -->
+    <div id="text"></div>
+
+    <!-- VIDEO -->
+    <div class="video-box">
+      <video controls autoplay loop muted>
+        <source src="malekvd.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery">
+      <img src="malek1.jpg" />
+      <img src="malek2.jpg" />
+      <img src="malek3.jpg" />
+      <img src="malek4.jpg" />
+      <img src="malek5.jpg" />
+      <img src="malek6.jpg" />
+    </div>
+
+    <iframe id="musicFrame" style="display: none"></iframe>
+
+    <script>
+      // PASSWORD
+      let correctPassword = "16/04/2007";
+
+      function checkPassword() {
+        let input = document.getElementById("passwordInput").value;
+
+        if (input === correctPassword) {
+          document.getElementById("lockScreen").style.display = "none";
+          startMusic();
+          typeWriter();
+          showImages();
+        } else {
+          document.getElementById("error").innerText = "ghalet 💔";
+        }
+      }
+
+      // MUSIC
+      let playing = false;
+
+      function startMusic() {
+        let frame = document.getElementById("musicFrame");
+
+        frame.src =
+          "https://www.youtube.com/embed/d9DmOjKUV10?autoplay=1&mute=1&loop=1&playlist=d9DmOjKUV10";
+
+        setTimeout(() => {
+          frame.src =
+            "https://www.youtube.com/embed/d9DmOjKUV10?autoplay=1&loop=1&playlist=d9DmOjKUV10";
+        }, 1500);
+
+        playing = true;
+      }
+
+      function toggleMusic() {
+        let frame = document.getElementById("musicFrame");
+
+        if (playing) {
+          frame.src = "";
+          playing = false;
+        } else {
+          startMusic();
+        }
+      }
+
+      // 💖 TEXT تونسي طويل
+      let msg =
+        "Malek ❤️\n\nmn nhar li 3raftk fih, 7yeti tbadlet bkolha...\nwallit n3ich 3la khatrek w nethakar esmék f kol lahtha 💖\n\nenti dh7kiti ki nkoon mt4chch,\nenti ro7i ki nkoon te3eb,\nenti aman li nalgah ki kol chay ywalli s3ib ❤️\n\nma nتصورش rou7i bla bik,\nma nحبش nhar y3addi w enti moch m3aya...\nkhater enti moch barka ensen n7ebou,\nenti kol 7yeti w kol ma 3andi 💕\n\nnchalah dima nkoonou ma3 baadhna,\nnfer7ou b sghar la7thaat,\nw net3adou kol chay kif kif 💫\n\nw nheb n9ollek li n7ebek moch shwaya...\nn7ebek barcha barcha barcha ❤️❤️❤️\n\nhappy birthday ya rou7i 🎂\nenti a7la haja saritli fi 7yeti 💖";
+
+      let i = 0;
+
+      function typeWriter() {
+        if (i < msg.length) {
+          document.getElementById("text").innerHTML +=
+            msg[i] === "\n" ? "<br><br>❤️ " : msg[i];
+          i++;
+          setTimeout(typeWriter, 35);
+        }
+      }
+
+      // IMAGES ANIMATION
+      function showImages() {
+        let imgs = document.querySelectorAll(".gallery img");
+
+        imgs.forEach((img, i) => {
+          setTimeout(() => {
+            img.classList.add("show");
+          }, 200 * i);
+        });
+      }
+
+      // HEARTS
+      setInterval(() => {
+        let heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 10 + "px";
+
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 6000);
+      }, 200);
+    </script>
+  </body>
+</html>
